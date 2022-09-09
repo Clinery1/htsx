@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+}
+h1 {
+    font-size: 200%;
+}
+html body {
+    background-color: rgb 0 0 0;
+    color: #fff;
+}
+article section, section .section_header {
+    font-size: 150%;
+    color: #f0f;
+}
+@media (screen and (not (min-width: 100px))) {
+    #bunny {
+        width: 400px;
+        height: 400px;
+    }
+}
+@font-face {
+    font-family: "FiraCode";
+    src: url("https://fonts.gstatic.com/s/firasans/v16/va9E4kDNxMZdWfMOD5Vvl4jL.woff2") format("woff2");
+}

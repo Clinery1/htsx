@@ -1,0 +1,11 @@
+(!!DOCTYPE html)
+(html
+    (head
+        (title "My website")
+        (!link (rel stylesheet) (href "./style.css"))
+        (!meta (name viewport) (content "width=device-width,initial-scale=1")))
+    (body
+        (h1 "This is a title")
+        ((section (id bunny_section)) 
+            (h2 "This is my bunny")
+            (!img (src "bunny.jpg") (id "bunny")))))

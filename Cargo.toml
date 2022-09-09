@@ -1,0 +1,10 @@
+[package]
+name = "htsx"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+s_expression_parser={git="https://github.com/Clinery1/s_expression_parser"}
+indexmap="1.9"
+clap={version="3",features=["derive"]}
