@@ -275,11 +275,7 @@ impl<'input> MediaQuery<'input> {
             },
             Self::EmptyAttribute(attr)=>f.write_str(attr),
             Self::Attribute(name,data)=>{
-                if !first {
-                    write!(f,"{}: ",name)?;
-                } else {
-                    write!(f,"({}: ",name)?;
-                }
+                write!(f,"({}: ",name)?;
                 data.into_css(f)?;
                 write!(f,")")
             },

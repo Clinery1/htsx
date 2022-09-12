@@ -4,7 +4,8 @@
     (margin 0))
 (body
     (background-color #000)
-    (color #fff))
+    (color #fff)
+    (padding 10px))
 (h1
     (font-size 200%))
 (h2
@@ -17,13 +18,19 @@
     (width 400px)
     (height 400px))
 (#bunny_section
-    (border (1px solid black))
+    (border
+        (1px
+            solid
+            black))
     (border-radius 10px)
-    (width max-content)
+    (width min-content)
     (height max-content)
     (padding 10px)
     (background-color #333))
-(@media (screen and (min-width 800px))
+(@media
+    (screen
+        and
+        (min-width 800px))
     (#bunny
-        (width 800px)
-        (height 800px)))
+        (width 600px)
+        (height 600px)))

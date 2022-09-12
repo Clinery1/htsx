@@ -30,6 +30,7 @@ pub enum Item<'input> {
         attributes:IndexMap<&'input str,Option<&'input str>>,
     },
     Text(&'input str),
+    Comment(Vec<&'input str>),
 }
 impl<'input> Item<'input> {
     fn create_empty_tag(name:&'input str,attrs:&'input [Object<'input>])->Result<Self,Error> {
@@ -84,9 +85,36 @@ impl<'input> Item<'input> {
 }
 impl<'input> Display for Item<'input> {
     fn fmt(&self,f:&mut Formatter)->Result<(),FmtError> {
-        if f.alternate() {
+        if f.alternate() {  // pretty formatting
             let indent=f.width().unwrap_or(0);
             match self {
+                Self::Comment(lines)=>{
+                    match lines.len() {
+                        0=>Ok(()),
+                        1=>{
+                            for _ in 0..indent {
+                                write!(f," ")?;
+                            }
+                            writeln!(f,"<!-- {} -->",lines[0])
+                        },
+                        _=>{
+                            for _ in 0..indent {
+                                write!(f," ")?;
+                            }
+                            writeln!(f,"<!--")?;
+                            for line in lines {
+                                for _ in 0..indent+4 {
+                                    write!(f," ")?;
+                                }
+                                writeln!(f," {}",line)?;
+                            }
+                            for _ in 0..indent {
+                                write!(f," ")?;
+                            }
+                            writeln!(f,"-->")
+                        },
+                    }
+                }
                 Self::Tag{name,attributes,inner}=>{
                     for _ in 0..indent {
                         write!(f," ")?;
@@ -132,8 +160,23 @@ impl<'input> Display for Item<'input> {
                     f.write_char('\n')
                 },
             }
-        } else {
+        } else {    // minimized formatting
             match self {
+                Self::Comment(lines)=>{
+                    match lines.len() {
+                        0=>Ok(()),
+                        1=>{
+                            write!(f,"<!-- {} -->",lines[0])
+                        },
+                        _=>{
+                            write!(f,"<!--")?;
+                            for line in lines {
+                                write!(f," {}",line)?;
+                            }
+                            write!(f," -->")
+                        },
+                    }
+                },
                 Self::Tag{name,attributes,inner}=>{
                     write!(f,"<{}",name)?;
                     for (attribute,maybe_data) in attributes {
@@ -173,6 +216,15 @@ impl<'input> TryFrom<&'input Object<'input>> for Item<'input> {
             Object::Ident(_,s,_)|Object::Number(_,s,_)=>Ok(Self::Text(s)),
             Object::List(start,items,end)=>{
                 match items.as_slice() {
+                    [Object::Ident(_,"//",_),raw_lines@..]=>{
+                        let mut lines=Vec::new();
+                        for i in raw_lines {
+                            if let Some(data)=i.str_data() {
+                                lines.push(data);
+                            }
+                        }
+                        Ok(Self::Comment(lines))
+                    },
                     [Object::Ident(_,name,_),attrs@..] if name.starts_with('!')=>Self::create_empty_tag(&name[1..],attrs),
                     [Object::Ident(_,name,_)|Object::Number(_,name,_),rest@..]=>Self::create_tag(name,&[],rest),
                     [Object::String(_,name,_),rest@..]=>Self::create_tag(name.as_str(),&[],rest),
