@@ -59,7 +59,7 @@ fn parse_and_write(name:&str,pretty:bool) {
         for i in file.items.iter() {
             elements.push(i.try_into().unwrap());
         }
-        let mut out=String::from("<!-- HTML Generated from HTSX: github.com/Clinery1/htsx -->\n");
+        let mut out=String::from("<!-- HTML Generated with HTSX: github.com/Clinery1/htsx -->\n");
         if pretty {
             for i in elements.iter() {
                 write!(out,"{:#}",i).unwrap();
@@ -77,7 +77,7 @@ fn parse_and_write(name:&str,pretty:bool) {
         for i in file.items.iter() {
             elements.push(i.try_into().unwrap());
         }
-        let mut out=String::from("/* CSS Generated from HTSX: github.com/Clinery1/htsx */\n");
+        let mut out=String::from("/* CSS Generated with HTSX: github.com/Clinery1/htsx */\n");
         for i in elements.iter() {
             // dbg!(i);
             i.into_css(&mut out,0).unwrap();
