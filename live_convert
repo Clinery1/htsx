@@ -6,7 +6,7 @@ inotifywait -e modify,create,delete,move -rm .|while read dir action file
         echo "$dir $action $file"
         if echo "$file"|grep -q "htsx"
             if echo "$action"|grep -q -e "CREATE" -e "MOVE_TO" -e "MODIFY"
-                cargo run --release -- convert -p "$dir$file"
+                htsx convert -p "$dir$file"
             else if echo "$action"|grep -q "MOVE_FROM"
                 /bin/rm (echo "$dir$file"|sed "s/htsx\$/html/")
             else if echo "$action"|grep -q "DELETE"
@@ -14,7 +14,7 @@ inotifywait -e modify,create,delete,move -rm .|while read dir action file
             end
         else if echo "$file"|grep -q "cssx"
             if echo "$action"|grep -q -e "CREATE" -e "MOVE_TO" -e "MODIFY"
-                cargo run --release -- convert "$dir$file"
+                htsx convert "$dir$file"
             else if echo "$action"|grep -q "MOVE_FROM"
                 /bin/rm (echo "$dir$file"|sed "s/cssx\$/css/")
             else if echo "$action"|grep -q "DELETE"
